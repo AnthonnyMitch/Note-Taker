@@ -1,34 +1,23 @@
-var db = require("../db/db.json");
-var store = require("../db/store");
 
-
-module.exports = function (app) {
-
-
-
-
-    var app = require("express").app();
-    var store = require("../db/store");
-
-    module.exports = function (app) {
-
-        app.get("/store", function (req, res) {
-            store.getstore()
-                .then(store => res.json(store))
-                .catch(err => res.status(500).json(err));
-        })
-
-        app.post("/store", function (req, res) {
-            store.addstore(req.body)
-                .then(store => res.json(store))
-                .catch(err => res.status(500).json(err));
-        })
-
-        app.delete("/store/:id", function (req, res) {
-            store.removeNote(req.params.id)
-                .then(() => res.json({ ok: true }))
-                .catch(err => res.status(500).json(err));
-        })
-
-    };
-    
+   var router =require("express").Router();
+   var notes = require("../db/notes");
+   
+   
+   router.get("/notes", function(req, res){
+       notes.getNotes()
+       .then(notes => res.json(notes))
+       .catch(err => res.status(500).json(err));
+   })
+   router.post("/notes", function(req, res){
+       notes.addNotes(req.body)
+       .then(notes => res.json(notes))
+       .catch(err => res.status(500).json(err));
+   })
+   router.delete("/notes/:id", function(req, res){
+       notes.removeNote(req.params.id)
+       .then(() => res.json({ok: true}))
+       .catch(err => res.status(500).json(err));
+   })
+   
+   module.exports = router;
+   
