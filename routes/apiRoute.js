@@ -2,41 +2,33 @@ var db = require("../db/db.json");
 var store = require("../db/store");
 
 
-module.exports = function(app) {
+module.exports = function (app) {
 
 
 
 
-// GET ROUTE 
+    var app = require("express").app();
+    var store = require("../db/store");
 
+    module.exports = function (app) {
 
-app.get("/api/db", function(req, res) {
-    res.json(db);
-  });
+        app.get("/store", function (req, res) {
+            store.getstore()
+                .then(store => res.json(store))
+                .catch(err => res.status(500).json(err));
+        })
 
-  app.get("/api/", function(req, res) {
-    res.json(store);
-  });
-// POST ROUTE 
-app.post("/api/db", function(req, res) {
+        app.post("/store", function (req, res) {
+            store.addstore(req.body)
+                .then(store => res.json(store))
+                .catch(err => res.status(500).json(err));
+        })
+
+        app.delete("/store/:id", function (req, res) {
+            store.removeNote(req.params.id)
+                .then(() => res.json({ ok: true }))
+                .catch(err => res.status(500).json(err));
+        })
+
+    };
     
-    if (db.length) {
-      db.push(req.body);
-      res.json(true);
-    }
-    else {
-      store.push(req.body);
-      res.json(false);
-    }
-  });
-
-
-//DELETE 
-app.post("/api/clear", function(req, res) {
-    // Empty out the arrays of data
-    db.length = 0;
-    store.length = 0;
-
-    res.json({ ok: true });
-  });
-};

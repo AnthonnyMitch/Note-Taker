@@ -1,4 +1,6 @@
 // Class for notes 
+const fs = require(`fs`);
+
 
 
 
